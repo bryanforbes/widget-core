@@ -152,7 +152,9 @@ export function ProjectorMixin<P, T extends Constructor<WidgetBase<P>>>(Base: T)
 		private _boundRender: Function;
 		private _projectorChildren: DNode[] = [];
 		private _projectorProperties: this['properties'] = {} as this['properties'];
+		// @ts-ignore
 		private _rootTagName: string;
+		// @ts-ignore
 		private _attachType: AttachType;
 
 		constructor(...args: any[]) {

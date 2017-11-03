@@ -1562,7 +1562,7 @@ describe('vdom', () => {
 						deferredCallbackCount: ++deferredCallbackCount
 					};
 				});
-				div.properties.renderCount = renderCount;
+				(<any> div.properties).renderCount = renderCount;
 				return div;
 			};
 
@@ -1604,7 +1604,7 @@ describe('vdom', () => {
 						another: 'property'
 					};
 				});
-				div.properties.foo = foo;
+				(<any> div.properties).foo = foo;
 				return div;
 			};
 

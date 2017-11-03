@@ -43,6 +43,7 @@ export interface WidgetAndElementEvent extends EventTypedObject<'properties:chan
 	key: string;
 	element: HTMLElement;
 	target: WidgetBase;
+	[Symbol.unscopables]: boolean;
 }
 
 export type BoundFunctionData = { boundFunc: (...args: any[]) => any, scope: any };
@@ -88,11 +89,6 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends E
 	private _cachedDNode: DNode | DNode[];
 
 	/**
-	 * map of specific property diff functions
-	 */
-	private _diffPropertyFunctionMap: Map<string, string>;
-
-	/**
 	 * map of decorators that are applied to this widget
 	 */
 	private _decoratorCache: Map<string, any[]>;
@@ -123,7 +119,6 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends E
 		this._children = [];
 		this._decoratorCache = new Map<string, any[]>();
 		this._properties = <P> {};
-		this._diffPropertyFunctionMap = new Map<string, string>();
 		this._bindFunctionPropertyMap = new WeakMap<(...args: any[]) => any, { boundFunc: (...args: any[]) => any, scope: any }>();
 		this._registry = new RegistryHandler();
 		this._nodeHandler = new NodeHandler();

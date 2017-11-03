@@ -22,7 +22,7 @@
 		"outDir": "_build/",
 		"removeComments": false,
 		"sourceMap": true,
-		"strictNullChecks": true,
+		"strict": true,
 		"target": "es5",
 		"types": [ "intern", "web-animations-js" ]
 	},
@@ -30,7 +30,6 @@
 		"./src/**/*.ts",
 		"./src/**/*.tsx",
 		"./tests/**/*.ts",
-		"./tests/**/*.tsx",
-		"./typings/index.d.ts"
+		"./tests/**/*.tsx"
 	]
 }
