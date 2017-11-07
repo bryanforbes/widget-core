@@ -5,12 +5,12 @@ export interface InjectorEventMap {
 	'invalidate': EventObject<'invalidate'>;
 }
 
-export class Injector<T = any> extends Evented<InjectorEventMap> {
+export class Injector<T = any, M extends InjectorEventMap = InjectorEventMap> extends Evented<M> {
 
 	private _payload: T;
 
 	constructor(payload: T) {
-		super({});
+		super();
 		this._payload = payload;
 	}
 

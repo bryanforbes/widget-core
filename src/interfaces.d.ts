@@ -172,7 +172,7 @@ export interface VirtualDomProperties {
 	 * A key is required when there are more children with the same selector and these children are added or removed dynamically.
 	 * NOTE: this does not have to be a string or number, a [[Component]] Object for instance is also possible.
 	 */
-	readonly key?: Object;
+	readonly key?: string | number;
 	/**
 	 * An array of supported class names to be added to classList on a DOM node
 	 */
@@ -451,7 +451,7 @@ export interface WidgetMetaConstructor<T extends WidgetMetaBase> {
 	new (properties: WidgetMetaProperties): T;
 }
 
-export interface NodeHandlerInterface extends Evented<{}> {
+export interface NodeHandlerInterface extends Evented<{}, string> {
 	get(key: string | number): HTMLElement | undefined;
 	has(key: string | number): boolean;
 	add(element: HTMLElement, key: string): void;

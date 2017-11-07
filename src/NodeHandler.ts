@@ -18,7 +18,7 @@ export interface NodeHandlerEventMap {
 	'Widget': EventObject<NodeEventType.Widget>;
 }
 
-export class NodeHandler extends Evented<NodeHandlerEventMap> implements NodeHandlerInterface {
+export class NodeHandler<M extends NodeHandlerEventMap = NodeHandlerEventMap> extends Evented<M, string> implements NodeHandlerInterface {
 
 	private _nodeMap = new Map<string, HTMLElement>();
 

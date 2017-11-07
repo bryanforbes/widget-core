@@ -24,14 +24,6 @@ export interface RegistryListener {
 	(event: RegistryEventObject): void;
 }
 
-/*export interface RegistryOn extends EventedOn {
-	(type: RegistryLabel, listener: RegistryListener | RegistryListener[]): Handle;
-}
-
-export interface RegistryEmit extends EventedEmit {
-	(event: RegistryEventObject): void;
-}*/
-
 /**
  * Widget Registry Interface
  */
@@ -99,7 +91,7 @@ export function isWidgetBaseConstructor<T extends WidgetBaseInterface>(item: any
 /**
  * The Registry implementation
  */
-export class Registry extends Evented<{}> implements RegistryInterface {
+export class Registry extends Evented<{}, RegistryLabel, RegistryEventObject> implements RegistryInterface {
 
 	/**
 	 * internal map of labels and RegistryItem

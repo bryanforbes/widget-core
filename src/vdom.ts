@@ -178,7 +178,7 @@ function removeClasses(domNode: Node, classes: SupportedClassName) {
 	}
 }
 
-function setProperties(domNode: Node, properties: VirtualDomProperties, projectionOptions: ProjectionOptions) {
+function setProperties(domNode: Element | Text, properties: VirtualDomProperties, projectionOptions: ProjectionOptions) {
 	const propNames = Object.keys(properties);
 	const propCount = propNames.length;
 	for (let i = 0; i < propCount; i++) {
@@ -247,7 +247,7 @@ function removeOrphanedEvents(
 }
 
 function updateProperties(
-	domNode: Node,
+	domNode: Element | Text,
 	previousProperties: VirtualDomProperties,
 	properties: VirtualDomProperties,
 	projectionOptions: ProjectionOptions
@@ -569,7 +569,7 @@ function updateChildren(
 				oldIndex = findOldIndex + 1;
 			}
 			else {
-				let insertBefore: Node | undefined = undefined;
+				let insertBefore: Element | Text | undefined = undefined;
 				let child: InternalDNode = oldChildren[oldIndex];
 				if (child) {
 					while (insertBefore === undefined) {
@@ -600,19 +600,19 @@ function updateChildren(
 }
 
 function addChildren(
-	domNode: Node,
+	domNode: Element | Text,
 	children: InternalDNode[] | undefined,
 	projectionOptions: ProjectionOptions,
 	parentInstance: WidgetBase,
-	insertBefore: undefined | Node = undefined,
-	childNodes?: Node[]
+	insertBefore: Element | Text | undefined = undefined,
+	childNodes?: (Element | Text)[]
 ) {
 	if (children === undefined) {
 		return;
 	}
 
 	if (projectionOptions.merge && childNodes === undefined) {
-		childNodes = arrayFrom(domNode.childNodes);
+		childNodes = arrayFrom(domNode.childNodes) as (Element | Text)[];
 	}
 
 	for (let i = 0; i < children.length; i++) {
@@ -637,7 +637,7 @@ function addChildren(
 }
 
 function initPropertiesAndChildren(
-	domNode: Node,
+	domNode: Element,
 	dnode: InternalHNode,
 	parentInstance: WidgetBase,
 	projectionOptions: ProjectionOptions
@@ -657,13 +657,13 @@ function initPropertiesAndChildren(
 
 function createDom(
 	dnode: InternalDNode,
-	parentNode: Node,
-	insertBefore: Node | undefined,
+	parentNode: Element | Text,
+	insertBefore: Element | Text | undefined,
 	projectionOptions: ProjectionOptions,
 	parentInstance: WidgetBase,
-	childNodes?: Node[]
+	childNodes?: (Element | Text)[]
 ) {
-	let domNode: Node | undefined;
+	let domNode: Element | Text | undefined;
 	if (isInternalWNode(dnode)) {
 		let { widgetConstructor } = dnode;
 		if (!isWidgetBaseConstructor<WidgetBase>(widgetConstructor)) {
@@ -736,7 +736,7 @@ function createDom(
 			else if (domNode!.parentNode !== parentNode) {
 				parentNode.appendChild(domNode);
 			}
-			initPropertiesAndChildren(domNode!, dnode, parentInstance, projectionOptions);
+			initPropertiesAndChildren(domNode! as Element, dnode, parentInstance, projectionOptions);
 		}
 	}
 }
@@ -891,7 +891,7 @@ function createProjection(dnode: InternalDNode | InternalDNode[], parentInstance
 }
 
 export const dom = {
-	create: function(dNode: RenderResult, instance: WidgetBase<any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
+	create: function(dNode: RenderResult, instance: WidgetBase<any, any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
 		const finalProjectorOptions = getProjectionOptions(projectionOptions);
 		const rootNode = document.createElement('div');
 		finalProjectorOptions.rootNode = rootNode;
@@ -904,7 +904,7 @@ export const dom = {
 		runAfterRenderCallbacks(finalProjectorOptions);
 		return createProjection(decoratedNode, instance, finalProjectorOptions);
 	},
-	append: function(parentNode: Element, dNode: RenderResult, instance: WidgetBase<any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
+	append: function(parentNode: Element, dNode: RenderResult, instance: WidgetBase<any, any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
 		const finalProjectorOptions = getProjectionOptions(projectionOptions);
 		finalProjectorOptions.rootNode = parentNode;
 		const decoratedNode = filterAndDecorateChildren(dNode, instance);
@@ -916,7 +916,7 @@ export const dom = {
 		runAfterRenderCallbacks(finalProjectorOptions);
 		return createProjection(decoratedNode, instance, finalProjectorOptions);
 	},
-	merge: function(element: Element, dNode: RenderResult, instance: WidgetBase<any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
+	merge: function(element: Element, dNode: RenderResult, instance: WidgetBase<any, any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
 		if (Array.isArray(dNode)) {
 			throw new Error('Unable to merge an array of nodes. (consider adding one extra level to the virtual DOM)');
 		}
@@ -934,14 +934,14 @@ export const dom = {
 		runAfterRenderCallbacks(finalProjectorOptions);
 		return createProjection(decoratedNode, instance, finalProjectorOptions);
 	},
-	replace: function(element: Element, dNode: RenderResult, instance: WidgetBase<any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
+	replace: function(element: Element, dNode: RenderResult, instance: WidgetBase<any, any, any>, projectionOptions?: Partial<ProjectionOptions>): Projection {
 		if (Array.isArray(dNode)) {
 			throw new Error('Unable to replace a node with an array of nodes. (consider adding one extra level to the virtual DOM)');
 		}
 		const finalProjectorOptions = getProjectionOptions(projectionOptions);
 		const decoratedNode = filterAndDecorateChildren(dNode, instance)[0] as InternalHNode;
 		finalProjectorOptions.rootNode = element.parentNode! as Element;
-		createDom(decoratedNode, element.parentNode!, element, finalProjectorOptions, instance);
+		createDom(decoratedNode, element.parentNode! as Element, element, finalProjectorOptions, instance);
 		finalProjectorOptions.afterRenderCallbacks.push(() => {
 			instance.emit({ type: 'widget-created' });
 		});

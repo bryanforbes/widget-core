@@ -277,7 +277,7 @@ describe('WidgetBase', () => {
 		});
 
 		it('elements are added to node handler on create', () => {
-			const element = {};
+			const element = {} as Element;
 			const key = '1';
 			const widget = new BaseTestWidget();
 			const meta = widget.meta(TestMeta);
@@ -287,7 +287,7 @@ describe('WidgetBase', () => {
 		});
 
 		it('elements are added to node handler on update', () => {
-			const element = {};
+			const element = {} as Element;
 			const key = '1';
 			const widget = new BaseTestWidget();
 			const meta = widget.meta(TestMeta);
@@ -321,7 +321,7 @@ describe('WidgetBase', () => {
 			}
 		}
 		const widget = new TestWidget();
-		widget.emit({ type: 'element-created', key: 'key', element: 'element' });
+		widget.emit({ type: 'element-created', key: 'key', element: <any> 'element' });
 	});
 
 	describe('onElementUpdated called on `element-updated` event', () => {
@@ -332,7 +332,7 @@ describe('WidgetBase', () => {
 			}
 		}
 		const widget = new TestWidget();
-		widget.emit({ type: 'element-updated', key: 'key', element: 'element' });
+		widget.emit({ type: 'element-updated', key: 'key', element: <any> 'element' });
 	});
 
 	describe('decorators', () => {

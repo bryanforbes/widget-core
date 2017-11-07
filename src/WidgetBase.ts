@@ -40,8 +40,8 @@ interface ReactionFunctionConfig {
 }
 
 export interface WidgetAndElementEvent<T extends EventType> extends EventObject<T> {
-	element: HTMLElement;
-	key: string;
+	element: Element;
+	key?: string | number;
 }
 
 export type BoundFunctionData = { boundFunc: (...args: any[]) => any, scope: any };
@@ -50,6 +50,7 @@ const decoratorMap = new Map<Function, Map<string, any[]>>();
 const boundAuto = auto.bind(null);
 
 export interface WidgetBaseEventMap {
+	'invalidated': { type: 'invalidated'; target: WidgetBase; };
 	'element-created': WidgetAndElementEvent<'element-created'>;
 	'element-updated': WidgetAndElementEvent<'element-updated'>;
 	'widget-created': EventObject<'widget-created'>;
@@ -59,7 +60,7 @@ export interface WidgetBaseEventMap {
 /**
  * Main widget base for all widgets to extend
  */
-export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends Evented<WidgetBaseEventMap> implements WidgetBaseInterface<P, C> {
+export class WidgetBase<P = WidgetProperties, C extends DNode = DNode, M extends WidgetBaseEventMap = WidgetBaseEventMap> extends Evented<M> implements WidgetBaseInterface<P, C> {
 
 	/**
 	 * static identifier
@@ -119,7 +120,7 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends E
 	 * @constructor
 	 */
 	constructor() {
-		super({});
+		super();
 
 		this._children = [];
 		this._decoratorCache = new Map<string, any[]>();
@@ -131,23 +132,23 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends E
 		this.own(this._nodeHandler);
 		this._boundRenderFunc = this.render.bind(this);
 		this._boundInvalidate = this.invalidate.bind(this);
-		this.own(this.on({
-			'element-created': ({ key, element }) => {
-				this._nodeHandler.add(element, `${key}`);
-				this.onElementCreated(element, key);
-			},
-			'element-updated': ({ key, element }) => {
-				this._nodeHandler.add(element, `${key}`);
-				this.onElementUpdated(element, key);
-			},
-			'widget-created': () => {
+		this.own([
+			this.on('element-created', ({ key, element }) => {
+				this._nodeHandler.add(element as HTMLElement, `${key}`);
+				this.onElementCreated(element, key as string);
+			}),
+			this.on('element-updated', ({ key, element }) => {
+				this._nodeHandler.add(element as HTMLElement, `${key}`);
+				this.onElementUpdated(element, key as string);
+			}),
+			this.on('widget-created', () => {
 				this._nodeHandler.addRoot(null as any, undefined);
-			},
-			'widget-updated': () => {
+			}),
+			this.on('widget-updated', () => {
 				this._nodeHandler.addRoot(null as any, undefined);
-			}
-		}));
-		this.own(this._registry.on('invalidate', this._boundInvalidate));
+			}),
+			this._registry.on('invalidate', this._boundInvalidate)
+		]);
 	}
 
 	protected meta<T extends WidgetMetaBase>(MetaType: WidgetMetaConstructor<T>): T {
