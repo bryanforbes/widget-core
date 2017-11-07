@@ -1,8 +1,8 @@
 import Promise from '@dojo/shim/Promise';
 import Map from '@dojo/shim/Map';
 import Symbol from '@dojo/shim/Symbol';
-import { Handle } from '@dojo/interfaces/core';
-import { BaseEventedEvents, Evented, EventObject } from '@dojo/core/Evented';
+import { EventObject } from '@dojo/core/interfaces';
+import { Evented } from '@dojo/core/Evented';
 import { Constructor, RegistryLabel, WidgetBaseConstructor, WidgetBaseInterface } from './interfaces';
 import { Injector } from './Injector';
 
@@ -24,9 +24,13 @@ export interface RegistryListener {
 	(event: RegistryEventObject): void;
 }
 
-export interface RegistryEvents extends BaseEventedEvents {
+/*export interface RegistryOn extends EventedOn {
 	(type: RegistryLabel, listener: RegistryListener | RegistryListener[]): Handle;
 }
+
+export interface RegistryEmit extends EventedEmit {
+	(event: RegistryEventObject): void;
+}*/
 
 /**
  * Widget Registry Interface
@@ -95,9 +99,7 @@ export function isWidgetBaseConstructor<T extends WidgetBaseInterface>(item: any
 /**
  * The Registry implementation
  */
-export class Registry extends Evented implements RegistryInterface {
-
-	public on: RegistryEvents;
+export class Registry extends Evented<{}> implements RegistryInterface {
 
 	/**
 	 * internal map of labels and RegistryItem

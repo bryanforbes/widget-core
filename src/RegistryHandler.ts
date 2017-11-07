@@ -4,7 +4,7 @@ import { Constructor, RegistryLabel, WidgetBaseInterface } from './interfaces';
 import { Registry, RegistryEventObject, RegistryItem } from './Registry';
 import { Injector } from './Injector';
 
-export class RegistryHandler extends Evented {
+export class RegistryHandler extends Evented<{}> {
 	private _registry = new Registry();
 	private _baseRegistry: Registry;
 	private _registryWidgetLabelMap: Map<Registry, RegistryLabel[]> = new Map();

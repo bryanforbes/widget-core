@@ -69,8 +69,16 @@ export interface InternalHNode extends HNode {
 
 export type InternalDNode = InternalHNode | InternalWNode;
 
+function isInternalWNode(child: DNode): child is InternalWNode {
+	return isWNode(child);
+}
+
+function isInternalHNode(child: DNode): child is InternalHNode {
+	return isHNode(child);
+}
+
 function same(dnode1: InternalDNode, dnode2: InternalDNode) {
-	if (isHNode(dnode1) && isHNode(dnode2)) {
+	if (isInternalHNode(dnode1) && isInternalHNode(dnode2)) {
 		if (dnode1.tag !== dnode2.tag) {
 			return false;
 		}
@@ -79,7 +87,7 @@ function same(dnode1: InternalDNode, dnode2: InternalDNode) {
 		}
 		return true;
 	}
-	else if (isWNode(dnode1) && isWNode(dnode2)) {
+	else if (isInternalWNode(dnode1) && isInternalWNode(dnode2)) {
 		if (dnode1.widgetConstructor !== dnode2.widgetConstructor) {
 			return false;
 		}
@@ -402,7 +410,7 @@ export function filterAndDecorateChildren(children: undefined | DNode | DNode[],
 			children[i] = toTextHNode(child);
 		}
 		else {
-			if (isHNode(child)) {
+			if (isInternalHNode(child)) {
 				if (child.properties.bind === undefined) {
 					(child.properties as any).bind = instance;
 					if (child.children && child.children.length > 0) {
@@ -438,7 +446,7 @@ function hasRenderChanged(previousRendered: InternalDNode[], rendered: InternalD
 }
 
 function nodeAdded(dnode: InternalDNode, transitions: TransitionStrategy) {
-	if (isHNode(dnode) && dnode.properties) {
+	if (isInternalHNode(dnode) && dnode.properties) {
 		const enterAnimation = dnode.properties.enterAnimation;
 		if (enterAnimation) {
 			if (typeof enterAnimation === 'function') {
@@ -452,12 +460,12 @@ function nodeAdded(dnode: InternalDNode, transitions: TransitionStrategy) {
 }
 
 function nodeToRemove(dnode: InternalDNode, transitions: TransitionStrategy, projectionOptions: ProjectionOptions) {
-	if (isWNode(dnode)) {
+	if (isInternalWNode(dnode)) {
 		projectionOptions.afterRenderCallbacks.push(dnode.instance.destroy.bind(dnode.instance));
 		const rendered = dnode.rendered || emptyArray ;
 		for (let i = 0; i < rendered.length; i++) {
 			const child = rendered[i];
-			if (isHNode(child)) {
+			if (isInternalHNode(child)) {
 				child.domNode!.parentNode!.removeChild(child.domNode!);
 			}
 			else {
@@ -500,7 +508,7 @@ function checkDistinguishable(childNodes: InternalDNode[], indexToCheck: number,
 			if (i !== indexToCheck) {
 				const node = childNodes[i];
 				if (same(node, childNode)) {
-					if (isWNode(childNode)) {
+					if (isInternalWNode(childNode)) {
 						const widgetName = (childNode.widgetConstructor as any).name;
 						let errorMsg = 'It is recommended to provide a unique \'key\' property when using the same widget multiple times as siblings';
 
@@ -565,7 +573,7 @@ function updateChildren(
 				let child: InternalDNode = oldChildren[oldIndex];
 				if (child) {
 					while (insertBefore === undefined) {
-						if (isWNode(child)) {
+						if (isInternalWNode(child)) {
 							child = child.rendered[0];
 						}
 						else {
@@ -610,7 +618,7 @@ function addChildren(
 	for (let i = 0; i < children.length; i++) {
 		const child = children[i];
 
-		if (isHNode(child)) {
+		if (isInternalHNode(child)) {
 			if (projectionOptions.merge && childNodes) {
 				let domElement: HTMLElement | undefined = undefined;
 				while (child.domNode === undefined && childNodes.length > 0) {
@@ -656,9 +664,9 @@ function createDom(
 	childNodes?: Node[]
 ) {
 	let domNode: Node | undefined;
-	if (isWNode(dnode)) {
+	if (isInternalWNode(dnode)) {
 		let { widgetConstructor } = dnode;
-		if (!isWidgetBaseConstructor(widgetConstructor)) {
+		if (!isWidgetBaseConstructor<WidgetBase>(widgetConstructor)) {
 			const item = parentInstance.registry.get<WidgetBase>(widgetConstructor);
 			if (item === null) {
 				return;
@@ -734,7 +742,7 @@ function createDom(
 }
 
 function updateDom(previous: any, dnode: InternalDNode, projectionOptions: ProjectionOptions, parentNode: Element, parentInstance: WidgetBase) {
-	if (isWNode(dnode)) {
+	if (isInternalWNode(dnode)) {
 		const { instance, rendered: previousRendered } = previous;
 		if (instance && previousRendered) {
 			instance.__setCoreProperties__(dnode.coreProperties);

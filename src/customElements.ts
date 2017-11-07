@@ -235,13 +235,13 @@ export function initializeElement(element: CustomElement) {
 		// find children
 		let children: DNode[] = [];
 		let elementChildren = arrayFrom(element.children);
-		elementChildren.forEach((childNode: HTMLElement, index: number) => {
+		elementChildren.forEach((childNode: Element, index: number) => {
 			const DomElement = DomWrapper(childNode);
 			children.push(w(DomElement, {
 				key: `child-${index}`
 			}));
 		});
-		elementChildren.forEach((childNode: HTMLElement) => {
+		elementChildren.forEach((childNode: Element) => {
 			element.removeChild(childNode);
 		});
 

@@ -1,5 +1,5 @@
-import { EventTypedObject } from '@dojo/interfaces/core';
-import { Evented } from '@dojo/core/Evented';
+import Evented from '@dojo/core/Evented';
+import { EventObject, EventType } from '@dojo/core/interfaces';
 import Map from '@dojo/shim/Map';
 import WeakMap from '@dojo/shim/WeakMap';
 import { v } from './d';
@@ -39,11 +39,9 @@ interface ReactionFunctionConfig {
 	reaction: DiffPropertyReaction;
 }
 
-export interface WidgetAndElementEvent extends EventTypedObject<'properties:changed'> {
-	key: string;
+export interface WidgetAndElementEvent<T extends EventType> extends EventObject<T> {
 	element: HTMLElement;
-	target: WidgetBase;
-	[Symbol.unscopables]: boolean;
+	key: string;
 }
 
 export type BoundFunctionData = { boundFunc: (...args: any[]) => any, scope: any };
@@ -51,10 +49,17 @@ export type BoundFunctionData = { boundFunc: (...args: any[]) => any, scope: any
 const decoratorMap = new Map<Function, Map<string, any[]>>();
 const boundAuto = auto.bind(null);
 
+export interface WidgetBaseEventMap {
+	'element-created': WidgetAndElementEvent<'element-created'>;
+	'element-updated': WidgetAndElementEvent<'element-updated'>;
+	'widget-created': EventObject<'widget-created'>;
+	'widget-updated': EventObject<'widget-updated'>;
+}
+
 /**
  * Main widget base for all widgets to extend
  */
-export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends Evented implements WidgetBaseInterface<P, C> {
+export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends Evented<WidgetBaseEventMap> implements WidgetBaseInterface<P, C> {
 
 	/**
 	 * static identifier
@@ -127,19 +132,19 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends E
 		this._boundRenderFunc = this.render.bind(this);
 		this._boundInvalidate = this.invalidate.bind(this);
 		this.own(this.on({
-			'element-created': ({ key, element }: WidgetAndElementEvent) => {
+			'element-created': ({ key, element }) => {
 				this._nodeHandler.add(element, `${key}`);
 				this.onElementCreated(element, key);
 			},
-			'element-updated': ({ key, element }: WidgetAndElementEvent) => {
+			'element-updated': ({ key, element }) => {
 				this._nodeHandler.add(element, `${key}`);
 				this.onElementUpdated(element, key);
 			},
-			'widget-created': ({ element }: WidgetAndElementEvent) => {
-				this._nodeHandler.addRoot(element, undefined);
+			'widget-created': () => {
+				this._nodeHandler.addRoot(null as any, undefined);
 			},
-			'widget-updated': ({ element }: WidgetAndElementEvent) => {
-				this._nodeHandler.addRoot(element, undefined);
+			'widget-updated': () => {
+				this._nodeHandler.addRoot(null as any, undefined);
 			}
 		}));
 		this.own(this._registry.on('invalidate', this._boundInvalidate));

@@ -1,6 +1,5 @@
 import { Destroyable } from '@dojo/core/Destroyable';
 import { Evented } from '@dojo/core/Evented';
-import { EventTargettedObject } from '@dojo/interfaces/core';
 import Map from '@dojo/shim/Map';
 import WeakMap from '@dojo/shim/WeakMap';
 
@@ -397,7 +396,7 @@ export interface DefaultWidgetBaseInterface extends WidgetBaseInterface<WidgetPr
  */
 export interface WidgetBaseInterface<
 	P = WidgetProperties,
-	C extends DNode = DNode> extends Evented {
+	C extends DNode = DNode> extends Evented<{}> {
 
 	/**
 	 * Widget properties
@@ -452,7 +451,7 @@ export interface WidgetMetaConstructor<T extends WidgetMetaBase> {
 	new (properties: WidgetMetaProperties): T;
 }
 
-export interface NodeHandlerInterface extends Evented {
+export interface NodeHandlerInterface extends Evented<{}> {
 	get(key: string | number): HTMLElement | undefined;
 	has(key: string | number): boolean;
 	add(element: HTMLElement, key: string): void;

@@ -1,7 +1,7 @@
 import { assign } from '@dojo/core/lang';
 import global from '@dojo/shim/global';
 import { createHandle } from '@dojo/core/lang';
-import { Handle } from '@dojo/interfaces/core';
+import { Handle } from '@dojo/core/interfaces';
 import { Evented } from '@dojo/core/Evented';
 import 'pepjs';
 import cssTransitions from '../animations/cssTransitions';

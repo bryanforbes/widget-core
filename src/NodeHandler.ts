@@ -1,4 +1,5 @@
 import { Evented } from '@dojo/core/Evented';
+import { EventObject } from '@dojo/core/interfaces';
 import Map from '@dojo/shim/Map';
 import { NodeHandlerInterface } from './interfaces';
 
@@ -12,7 +13,12 @@ export enum NodeEventType {
 	Widget = 'Widget'
 }
 
-export class NodeHandler extends Evented implements NodeHandlerInterface {
+export interface NodeHandlerEventMap {
+	'Projector': EventObject<NodeEventType.Projector>;
+	'Widget': EventObject<NodeEventType.Widget>;
+}
+
+export class NodeHandler extends Evented<NodeHandlerEventMap> implements NodeHandlerInterface {
 
 	private _nodeMap = new Map<string, HTMLElement>();
 
