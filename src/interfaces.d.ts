@@ -452,11 +452,11 @@ export interface WidgetMetaConstructor<T extends WidgetMetaBase> {
 }
 
 export interface NodeHandlerInterface extends Evented<{}, string> {
-	get(key: string | number): HTMLElement | undefined;
+	get(key: string | number): Element | undefined;
 	has(key: string | number): boolean;
-	add(element: HTMLElement, key: string): void;
-	addRoot(element: HTMLElement, key: string): void;
-	addProjector(element: HTMLElement, properties: VirtualDomProperties): void;
+	add(element: Element, key: string): void;
+	addRoot(): void;
+	addProjector(): void;
 	clear(): void;
 }
 

@@ -8,7 +8,7 @@ import { HNODE } from './../../src/d';
 registerSuite('tsx', {
 	'create a registry wrapper'() {
 		const RegistryWrapper = fromRegistry<WidgetProperties>('tag');
-		assert.strictEqual((<any> RegistryWrapper).type, REGISTRY_ITEM);
+		assert.strictEqual((RegistryWrapper as any).type, REGISTRY_ITEM);
 		const registryWrapper = new RegistryWrapper();
 		assert.strictEqual(registryWrapper.name, 'tag');
 		// These will always be undefined but show the type inference of properties.
@@ -51,7 +51,7 @@ registerSuite('tsx', {
 			assert.strictEqual(node.type, HNODE);
 		},
 		'defaults `null` properties to empty object'() {
-			const node: HNode = <HNode> tsx('div', <any> null);
+			const node: HNode = <HNode> tsx('div', null as any);
 			assert.deepEqual(node.tag, 'div');
 			assert.deepEqual(node.properties, {});
 			assert.deepEqual(node.children, []);

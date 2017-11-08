@@ -41,7 +41,7 @@ interface ReactionFunctionConfig {
 
 export interface WidgetAndElementEvent<T extends EventType> extends EventObject<T> {
 	element: Element;
-	key?: string | number;
+	key: string | number;
 }
 
 export type BoundFunctionData = { boundFunc: (...args: any[]) => any, scope: any };
@@ -60,7 +60,7 @@ export interface WidgetBaseEventMap {
 /**
  * Main widget base for all widgets to extend
  */
-export class WidgetBase<P = WidgetProperties, C extends DNode = DNode, M extends WidgetBaseEventMap = WidgetBaseEventMap> extends Evented<M> implements WidgetBaseInterface<P, C> {
+export class WidgetBase<P = WidgetProperties, C extends DNode = DNode> extends Evented<WidgetBaseEventMap> implements WidgetBaseInterface<P, C> {
 
 	/**
 	 * static identifier
@@ -128,24 +128,24 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode, M extends
 		this._bindFunctionPropertyMap = new WeakMap<(...args: any[]) => any, { boundFunc: (...args: any[]) => any, scope: any }>();
 		this._registry = new RegistryHandler();
 		this._nodeHandler = new NodeHandler();
-		this.own(this._registry);
-		this.own(this._nodeHandler);
 		this._boundRenderFunc = this.render.bind(this);
 		this._boundInvalidate = this.invalidate.bind(this);
 		this.own([
+			this._registry,
+			this._nodeHandler,
 			this.on('element-created', ({ key, element }) => {
-				this._nodeHandler.add(element as HTMLElement, `${key}`);
-				this.onElementCreated(element, key as string);
+				this._nodeHandler.add(element, `${key}`);
+				this.onElementCreated(element, key);
 			}),
 			this.on('element-updated', ({ key, element }) => {
-				this._nodeHandler.add(element as HTMLElement, `${key}`);
-				this.onElementUpdated(element, key as string);
+				this._nodeHandler.add(element, `${key}`);
+				this.onElementUpdated(element, key);
 			}),
 			this.on('widget-created', () => {
-				this._nodeHandler.addRoot(null as any, undefined);
+				this._nodeHandler.addRoot();
 			}),
 			this.on('widget-updated', () => {
-				this._nodeHandler.addRoot(null as any, undefined);
+				this._nodeHandler.addRoot();
 			}),
 			this._registry.on('invalidate', this._boundInvalidate)
 		]);
@@ -172,7 +172,7 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode, M extends
 	 * @param element The dom node represented by the vdom node.
 	 * @param key The vdom node's key.
 	 */
-	protected onElementCreated(element: Element, key: string): void {
+	protected onElementCreated(element: Element, key: string | number): void {
 		// Do nothing by default.
 	}
 
@@ -182,7 +182,7 @@ export class WidgetBase<P = WidgetProperties, C extends DNode = DNode, M extends
 	 * @param element The dom node represented by the vdom node.
 	 * @param key The vdom node's key.
 	 */
-	protected onElementUpdated(element: Element, key: string): void {
+	protected onElementUpdated(element: Element, key: string | number): void {
 		// Do nothing by default.
 	}
 

@@ -20,9 +20,9 @@ export interface NodeHandlerEventMap {
 
 export class NodeHandler<M extends NodeHandlerEventMap = NodeHandlerEventMap> extends Evented<M, string> implements NodeHandlerInterface {
 
-	private _nodeMap = new Map<string, HTMLElement>();
+	private _nodeMap = new Map<string, Element>();
 
-	public get(key: string): HTMLElement | undefined {
+	public get(key: string): Element | undefined {
 		return this._nodeMap.get(key);
 	}
 
@@ -30,12 +30,12 @@ export class NodeHandler<M extends NodeHandlerEventMap = NodeHandlerEventMap> ex
 		return this._nodeMap.has(key);
 	}
 
-	public add(element: HTMLElement, key: string): void {
+	public add(element: Element, key: string): void {
 		this._nodeMap.set(key, element);
 		this.emit({ type: key });
 	}
 
-	public addRoot(element: HTMLElement, key?: string): void {
+	public addRoot(): void {
 		this.emit({ type: NodeEventType.Widget });
 	}
 

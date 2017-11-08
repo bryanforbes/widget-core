@@ -321,7 +321,7 @@ describe('WidgetBase', () => {
 			}
 		}
 		const widget = new TestWidget();
-		widget.emit({ type: 'element-created', key: 'key', element: <any> 'element' });
+		widget.emit({ type: 'element-created', key: 'key', element: 'element' as any });
 	});
 
 	describe('onElementUpdated called on `element-updated` event', () => {
@@ -332,7 +332,7 @@ describe('WidgetBase', () => {
 			}
 		}
 		const widget = new TestWidget();
-		widget.emit({ type: 'element-updated', key: 'key', element: <any> 'element' });
+		widget.emit({ type: 'element-updated', key: 'key', element: 'element' as any });
 	});
 
 	describe('decorators', () => {

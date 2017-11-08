@@ -53,16 +53,9 @@ registerSuite('NodeHandler', {
 					assert.isTrue(projectorStub.notCalled);
 				},
 				'add root emits Widget'() {
-					nodeHandler.addRoot(element, 'foo');
+					nodeHandler.addRoot();
 
 					assert.isTrue(widgetStub.calledOnce);
-					assert.isTrue(projectorStub.notCalled);
-				},
-				'add root without a key emits Widget event only'() {
-					nodeHandler.addRoot(element);
-
-					assert.isTrue(widgetStub.calledOnce);
-					assert.isTrue(elementStub.notCalled);
 					assert.isTrue(projectorStub.notCalled);
 				},
 				'add projector emits Projector event'() {

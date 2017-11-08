@@ -19,7 +19,7 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findById('testButton');
 		},
@@ -28,7 +28,7 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findById('testButton')
 				.then((element: any) => {
@@ -43,7 +43,7 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findByCssSelector('#testButton > button')
 				.click()
@@ -58,7 +58,7 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findByCssSelector('#testButton > button')
 				.click()
@@ -73,7 +73,7 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findById('testButton-2')
 				.then((element: any) => {
@@ -88,13 +88,13 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findById('testButton')
 				.end()
 				.execute('document.querySelector("test-button").setAttribute("label", "greetings")')
 				.then(pollUntil(function () {
-					return (<any> document).querySelector('test-button > button').innerHTML === 'greetings world';
+					return (document as any).querySelector('test-button > button').innerHTML === 'greetings world';
 				}, undefined, 1000), undefined);
 		},
 		'setting custom element properties updates widget'() {
@@ -102,13 +102,13 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findByCssSelector('no-attributes > button')
 				.end()
 				.execute('document.querySelector("no-attributes").buttonLabel = "greetings"')
 				.then(pollUntil(function () {
-					return (<any> document).querySelector('no-attributes > button').innerHTML === 'greetings';
+					return (document as any).querySelector('no-attributes > button').innerHTML === 'greetings';
 				}, undefined, 1000), undefined);
 		},
 		'creating elements manually works'() {
@@ -116,12 +116,12 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findByCssSelector('#manualButton > button')
 				.end()
 				.then(pollUntil(function () {
-					return (<any> document).querySelector('#manualButton > button').innerHTML === 'manual';
+					return (document as any).querySelector('#manualButton > button').innerHTML === 'manual';
 				}, undefined, 1000), undefined);
 		},
 		'elements readded to the DOM are only initialized once'() {
@@ -129,12 +129,12 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findByCssSelector('#reinitButton > button')
 				.end()
 				.then(pollUntil(function () {
-					return (<any> document).querySelector('#reinitButton > button').innerHTML === 'test';
+					return (document as any).querySelector('#reinitButton > button').innerHTML === 'test';
 				}, undefined, 1000), undefined);
 		},
 		'declarative children should be wrapped as widgets'() {
@@ -142,7 +142,7 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findByCssSelector('#parent-element > div > child-wrapper#nested-parent > div > div')
 				.then((element: any) => {
@@ -165,7 +165,7 @@ registerSuite('registerCustomElement', {
 				this.skip('not compatible with iOS 9.1 or Safari 9.1');
 			}
 			return this.remote
-				.get((<any> require).toUrl('./support/registerCustomElement.html'))
+				.get((require as any).toUrl('./support/registerCustomElement.html'))
 				.setFindTimeout(1000)
 				.findByCssSelector('#dynamic-parent-element > div > child-wrapper > div > div')
 				.then((element: any) => {
