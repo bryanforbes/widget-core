@@ -6,9 +6,7 @@
 /typings
 .baseDir.ts
 .tscache
-coverage-unmapped.json
-coverage-final.json
-coverage-final.lcov
+/coverage.json
 npm-debug.log
 /_apidoc
 deploy_key

@@ -5,7 +5,7 @@ import Test from 'intern/lib/Test';
 
 function getPage(test: Test) {
 	return test.remote
-		.get('_build/tests/functional/meta/Drag.html')
+		.get('dist/testing/tests/functional/meta/Drag.html')
 		.setFindTimeout(5000);
 }
 

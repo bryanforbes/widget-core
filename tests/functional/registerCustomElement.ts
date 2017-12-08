@@ -9,7 +9,7 @@ function getPage(test: Test) {
 		test.skip('not compatible with iOS 9.1 or Safari 9.1');
 	}
 	return test.remote
-		.get('_build/tests/functional/support/registerCustomElement.html')
+		.get('dist/testing/tests/functional/support/registerCustomElement.html')
 		.setFindTimeout(1000);
 }
 

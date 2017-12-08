@@ -1,9 +1,9 @@
 import { WidgetBase } from '../../../src/WidgetBase';
-import { WidgetProperties } from '../../../src/interfaces';
+import { WidgetProperties, HNode } from '../../../src/interfaces';
 import { v } from '../../../src/d';
 import customElement from '../../../src/decorators/customElement';
 
-interface TestButtonProperties extends WidgetProperties {
+export interface TestButtonProperties extends WidgetProperties {
 	label: string;
 	labelSuffix: string;
 	onClick: () => void;
@@ -24,7 +24,7 @@ export class TestButton extends WidgetBase<TestButtonProperties> {
 		this.properties.onClick && this.properties.onClick();
 	}
 
-	render(this: TestButton) {
+	render(this: TestButton): HNode {
 		const { onClick : onclick } = this;
 		const { label = '', labelSuffix = '' } = this.properties;
 

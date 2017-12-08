@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="../../../../node_modules/@dojo/shim/util/amd.js"></script>
-	<script src="../../../../node_modules/@webcomponents/custom-elements/custom-elements.min.js"></script>
-	<script src="../../../../node_modules/@webcomponents/custom-elements/src/native-shim.js"></script>
-	<script src="../../../../node_modules/@dojo/loader/loader.js"></script>
+	<script src="../../../../../node_modules/@dojo/shim/util/amd.js"></script>
+	<script src="../../../../../node_modules/@webcomponents/custom-elements/custom-elements.min.js"></script>
+	<script src="../../../../../node_modules/@webcomponents/custom-elements/src/native-shim.js"></script>
+	<script src="../../../../../node_modules/@dojo/loader/loader.js"></script>
 </head>
 <body>
 <test-button id="testButton-2" label="world" labelsuffix="hello"></test-button>
@@ -24,7 +24,7 @@
 	window.connectedEvent = false;
 
 	require.config(shimAmdDependencies({
-		baseUrl: '../../../../'
+		baseUrl: '../../../../../'
 	}));
 
 	document.getElementById('testButton').addEventListener('connected', function() {
@@ -32,7 +32,7 @@
 	});
 
 	require(['@dojo/shim/main'], function() {
-		require(['_build/tests/functional/decorators/customElement'], function () {
+		require(['dist/testing/tests/functional/decorators/customElement'], function () {
 			window.ready = true;
 		});
 	});

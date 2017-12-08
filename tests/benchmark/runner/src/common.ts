@@ -32,6 +32,6 @@ function f(name: string, keyed: boolean, options: Options = {uri: null, useShado
 }
 
 export let frameworks = [
-	f('dojo2-v0.2.0-non-keyed', false, { uri: '_build/tests/benchmark/app' }),
-	f('vanillajs-non-keyed', false, { uri: '_build/tests/benchmark/vanillajs-non-keyed' })
+	f('dojo2-v0.2.0-non-keyed', false, { uri: 'dist/testing/tests/benchmark/app' }),
+	f('vanillajs-non-keyed', false, { uri: 'dist/testing/tests/benchmark/vanillajs-non-keyed' })
 ];
